@@ -2,6 +2,7 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
+<link rel="manifest" href="manifest.json">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -10,28 +11,7 @@
 <meta name="theme-color" content="#0a0a0a">
 <title>Everything Tools</title>
 <script>
-// ── PWA manifest (inline via Blob — works from a single HTML file) ────────────
-(function() {
-  var manifest = {
-    name: "Everything Tools",
-    short_name: "EvrTools",
-    description: "Audio, Video, Transcription, Color Palette, Expressions, Emoji",
-    start_url: "./",
-    display: "standalone",
-    background_color: "#0a0a0a",
-    theme_color: "#0a0a0a",
-    orientation: "landscape-primary",
-    icons: [
-      { src: "icon_192.png", sizes: "192x192", type: "image/png", purpose: "any maskable" },
-      { src: "icon_512.png", sizes: "512x512", type: "image/png", purpose: "any maskable" }
-    ]
-  };
-  var blob = new Blob([JSON.stringify(manifest)], {type: "application/manifest+json"});
-  var link = document.createElement("link");
-  link.rel  = "manifest";
-  link.href = URL.createObjectURL(blob);
-  document.currentScript.insertAdjacentElement("beforebegin", link);
-})();
+// manifest.json is a separate file in the repo — linked in <head>
 
 // ── Service Worker (inline via Blob) ─────────────────────────────────────────
 (function() {
