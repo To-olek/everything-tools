@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" sizes="32x32" href="icon_32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="icon_16.png">
+<link rel="apple-touch-icon" href="icon_192.png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -13,32 +16,12 @@
 <script>
 // manifest.json is a separate file in the repo — linked in <head>
 
-// ── Service Worker (inline via Blob) ─────────────────────────────────────────
-(function() {
-  if (!("serviceWorker" in navigator)) return;
-  var sw = `
-const CACHE = "et-v1";
-self.addEventListener("install", () => self.skipWaiting());
-self.addEventListener("activate", e => e.waitUntil(self.clients.claim()));
-self.addEventListener("fetch", e => {
-  if (!e.request.url.startsWith("http")) return;
-  e.respondWith(
-    caches.open(CACHE).then(cache =>
-      cache.match(e.request).then(cached =>
-        cached || fetch(e.request).then(resp => {
-          if (resp.ok) cache.put(e.request, resp.clone());
-          return resp;
-        }).catch(() => cached)
-      )
-    )
-  );
-});
-  `;
-  var blob = new Blob([sw], {type: "application/javascript"});
-  navigator.serviceWorker.register(URL.createObjectURL(blob), {scope: "./"})
-    .then(r => console.log("SW ok"))
-    .catch(e => console.warn("SW:", e));
-})();
+// ── Service Worker ───────────────────────────────────────────────────────────
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./sw.js')
+    .then(r => console.log('SW registered'))
+    .catch(e => console.warn('SW failed:', e));
+}
 
 // ── Install prompt ────────────────────────────────────────────────────────────
 var _pwaPrompt = null;
